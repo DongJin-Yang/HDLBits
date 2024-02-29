@@ -1,0 +1,22 @@
+module top_module (
+    input clk,
+    input aresetn,    // Asynchronous active-low reset
+    input x,
+    output z ); 
+	parameter a = 0, b = 1, c = 2;
+    reg [1:0] state, next;
+    
+    always @ (*) begin
+        case(state)
+            a : next = x ? c : a;
+            b : next = x ? c : a;
+            c : next = x ? c : b;
+        endcase
+    end
+    always @ (posedge clk, negedge aresetn) begin
+        if(!aresetn) state <= a;
+        else state <= next;
+    end
+    assign z = (state == b) & x;
+endmodule
+
